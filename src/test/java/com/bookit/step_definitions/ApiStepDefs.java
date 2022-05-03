@@ -140,15 +140,20 @@ public class ApiStepDefs {
 
 
     @When("I send POST request {string} endpoint with following information")
-    public void i_send_POST_request_endpoint_with_following_information(String string, io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new cucumber.api.PendingException();
+    public void i_send_POST_request_endpoint_with_following_information(String path, Map<String,String> userInfo) {
+        System.out.println(userInfo);
+
+         response =  given()
+                    .accept(ContentType.JSON)
+                    .and()
+                    .header("Authorization", token)
+                    .queryParams(userInfo)
+                    .log().all()
+            .when().post(ConfigurationReader.get("base_url")+path)
+                    .then().log().all().extract().response();
+
+
+
     }
 
 }

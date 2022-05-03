@@ -12,3 +12,5 @@ Feature: Create Student
       | campus-location | VA                   |
       | batch-number    | 8                    |
       | team-name       | Nukes                |
+    Then status code should be 201
+    And I delete previously added student
