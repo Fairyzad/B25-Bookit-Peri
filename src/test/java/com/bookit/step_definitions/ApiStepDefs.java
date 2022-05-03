@@ -4,6 +4,7 @@ import com.bookit.pages.SelfPage;
 import com.bookit.utilities.BookitUtils;
 import com.bookit.utilities.ConfigurationReader;
 import com.bookit.utilities.DBUtils;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,6 +22,7 @@ public class ApiStepDefs {
     String token;
     Response response;
     String emailGlobal;
+    int idToDelete;
 
     @Given("I logged Bookit api using {string} and {string}")
     public void i_logged_Bookit_api_using_and(String email, String password) {
@@ -152,8 +154,19 @@ public class ApiStepDefs {
             .when().post(ConfigurationReader.get("base_url")+path)
                     .then().log().all().extract().response();
 
-
+         idToDelete = response.path("entryiId");
 
     }
 
+    @And("I delete previously added student")
+    public void iDeletePreviouslyAddedStudent() {
+        //we need id from previous post request
+
+        given()
+                .header("Authorization", token)
+                .pathParam("id",idToDelete)
+                .when().delete(ConfigurationReader.get("base_url")+"/api/students/{id}")
+                .then().statusCode(204);
+
+    }
 }
