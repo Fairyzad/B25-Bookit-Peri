@@ -19,12 +19,14 @@ public class ApiStepDefs {
 
     String token;
     Response response;
+    String emailGlobal;
 
     @Given("I logged Bookit api using {string} and {string}")
     public void i_logged_Bookit_api_using_and(String email, String password) {
 
 
          token = BookitUtils.generateToken(email,password);
+        emailGlobal = email;
     }
 
     @When("I get the current user information from api")
@@ -55,7 +57,7 @@ public class ApiStepDefs {
         //get information from database
         String query ="SELECT firstname,lastname,role\n" +
                 "FROM users\n" +
-                "WHERE email = 'fscoughx@msu.edu'";
+                "WHERE email = '"+emailGlobal+"'";
 
         Map<String, Object> dbMap = DBUtils.getRowMap(query);
         System.out.println(dbMap);
