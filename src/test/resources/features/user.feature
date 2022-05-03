@@ -13,7 +13,7 @@ Feature: User Verification
      When I get the current user information from api
      Then the information about current user from api and database should match
 
-   @db @wip
+   @db
    Scenario: three point/layer (UI,API,DATABASE)
      Given user logs in using "fscoughx@msu.edu" "feodorascough"
      And user is on the my self page
