@@ -7,12 +7,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.junit.Assert;
 
 import static io.restassured.RestAssured.*;
 
 public class ApiStepDefs {
 
     String token;
+    Response response;
 
     @Given("I logged Bookit api using {string} and {string}")
     public void i_logged_Bookit_api_using_and(String email, String password) {
@@ -24,7 +26,7 @@ public class ApiStepDefs {
     @When("I get the current user information from api")
     public void i_get_the_current_user_information_from_api() {
 
-        Response response = given().accept(ContentType.JSON)
+        response = given().accept(ContentType.JSON)
                 .and()
                 .header("Authorization", token)
                 .when().get(ConfigurationReader.get("base_url") + "/api/users/me");
@@ -34,9 +36,13 @@ public class ApiStepDefs {
     }
 
     @Then("status code should be {int}")
-    public void status_code_should_be(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+    public void status_code_should_be(int statusCode) {
+
+        //get the status code from global response, which is stored from previous request
+        //and verify if it matches with the status code from feature file
+        System.out.println(response.statusCode());
+        Assert.assertEquals(statusCode,response.statusCode());
+
     }
 
 
