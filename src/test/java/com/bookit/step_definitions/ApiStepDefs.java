@@ -2,12 +2,16 @@ package com.bookit.step_definitions;
 
 import com.bookit.utilities.BookitUtils;
 import com.bookit.utilities.ConfigurationReader;
+import com.bookit.utilities.DBUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Assert;
+
+import java.util.Map;
 
 import static io.restassured.RestAssured.*;
 
@@ -47,8 +51,35 @@ public class ApiStepDefs {
 
     @Then("the information about current user from api and database should match")
     public void the_information_about_current_user_from_api_and_database_should_match() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+
+        //get information from database
+        String query ="SELECT firstname,lastname,role\n" +
+                "FROM users\n" +
+                "WHERE email = 'fscoughx@msu.edu'";
+
+        Map<String, Object> dbMap = DBUtils.getRowMap(query);
+        System.out.println(dbMap);
+
+        //save database information into expected variables
+        String expectedFirstName = (String) dbMap.get("firstname");
+        String expectedLastName = (String) dbMap.get("lastname");
+        String expectedRole= (String) dbMap.get("role");
+
+
+        //get information from api
+        JsonPath jsonPath = response.jsonPath();
+
+        String actualFirstName = jsonPath.getString("firstName");
+        String actualLastName = jsonPath.getString("lastName");
+        String actualRole = jsonPath.getString("role");
+
+        //compare database vs api
+
+        Assert.assertEquals(expectedFirstName,actualFirstName);
+        Assert.assertEquals(expectedLastName,actualLastName);
+        Assert.assertEquals(expectedRole,actualRole);
+
+
     }
 
 

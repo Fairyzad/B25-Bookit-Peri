@@ -7,7 +7,7 @@ Feature: User Verification
     When I get the current user information from api
     Then status code should be 200
 
-    @wip
+    @db @wip
    Scenario: verify information about logged user from api and database
      Given I logged Bookit api using "fscoughx@msu.edu" and "feodorascough"
      When I get the current user information from api
